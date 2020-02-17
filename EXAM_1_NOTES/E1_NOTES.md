@@ -1,0 +1,105 @@
+## Jan 27 - 31
+#### Brief intro of OS
+- Operating Systems are:
+    - Referees: 
+        - Manage shared resources
+        - Provide protection and communication for process
+    - Illutionists:
+        - Provide the illusion of infinite resources
+    - Glue: 
+        - Provide standard services which the hardware implements
+
+#### History of Operating Systems and Dual Mode Execution
+- Phase 1 (Expensive Hardware, Cheap Humans): 
+    - 1)One user on the console, one process at a time
+        - Problem: Low utilization of expensive components
+    - 2)Batch processing: load program, run, output to tape, print results, repeat (1955-1965)
+        - Advantage: 
+            - Next job can be loaded immediately as previous one finished
+        - Disadvantages:
+            - No protection - can easily crash bash monitor
+            - Computer is idle during I/O (Load program, output to tape, print results)
+    - 3) Overlap ofI/O and computation, interrupts
+        - Performance improves because I/O and processing happen concurrently
+        - Concurrency? Concurrency is the execution of several instruction sequences at the same time. In an operating system, this happens when there are several process threads running in parallel. These threads may communicate with each other through either shared memory or message passing. Concurrency results in sharing of resources result in problems like:- deadlocks and resources starvation.
+    - 4) Multiprogramming: several programs run at the same time sharing the machine
+        - OS manages interacitons between concurrent programs
+        - Requires: memory protection and relocation
+        - Keepin several jobsin memory and multiplex CPU between Jobs
+- Phase 2 (Cheap Hardware, Expensive Humans): 
+    - 5) Interactive Timesharing (1970-)
+        - Requires: more sharing, more protection, more concurrency
+        - New OS services: shell, file system, rapid process switching, virtual memory
+        - New problems: response time, thrashing
+    - 6) Personal Computing
+        - Computers are cheap
+- Phase 3 (Very cheap hardware, very expensie humans):
+    - 7) Parallel and distributed computing
+        - In parallel systems, multiple processors are in the same machine, sharing memory, I/O devices
+        - In distributed systems, multiple processors comminicate via a network
+        - Advantages: increases performance, increases reliability, sharing of specialized resources
+
+#### Dual Mode Execution
+- OS Interfaces
+    - Three interfaces
+        - Abstract Machine Interface: between OS and apps: 
+        - Application programming interface: function calls provided to applications
+        - Hardware abstraction layer: abstracts hardware internally to the OS
+- Why is dual mode crucial?
+    - If applications had free rein then buggy or malicious applications could:
+        - Crash other applications
+        - Violate privacy of other applications
+        - Hog all the resources
+        - Change the OS
+        - Crash the os
+- Box around the application:
+    - An abstraction for protection
+        - Represents an application program exevuting with restricted rights
+    - Restricting rights must not hinder functionality
+- A process is a program during execution. It is the basic unit of execution in an OS. Different processes may run different instances of the same program. At a minimum, process execution requires following resources: Memory to contain the program code and data & a set of CPU registers to support execution
+- How can the OS enforce restriced rights?
+    - BAD WAY: OS interprets each instruction. TOO SLOW
+    - GOOD WAY: Dual mode execution with restricted access in the user mode and unrestricted access in the kernel mode.
+- USER vs KERNEL MODE
+    - User MAY NOT/Kernel CAN: 
+        - address I/O directly
+        - use instructions that manipulate OS memory
+        - set the mode bits that determine user or kernel mode
+        - disable and enable interrupts
+        - halt the machine
+- How to transition modes (entering the kernel)(3 Methods)?
+    - Exceptions
+    - Interrupts
+        - Asynchronous (not related to instruction that just executed)
+    - System calls/traps 
+        - Synchronous
+        - user program requests OS device
+- What is happening when user mode to kernel mode?
+    - 1) OS saves state of user program
+    - 2) Hardware identifies why boundary is crossed (system call?, interrupt?, which exception)
+        - Saving the state of the interrupted process
+            - Privileged hw register points to exception stack
+            - Why not use user-level stack: Reliability (even if user's stack points to invalid address, handlers continure to work), Security (kernel state should not be stored in user space)
+            - One exception stack per processor/process/thread
+        - System calls: A request by a user-level process to call a function in the kernel is a sysem call (read(), write(), exit()). It is the interface between the application and the operating system. Parameters passed according to calling convention
+            - 1) User process executes a trap instruction
+            - 2) Hardware calls the OS at the system-call handler, a prespecified location
+            - 3) OS then identifies the required service and parameters, executes the required service, sets a register to contain the result of call, executes an RTI instruction to return to the user program
+            - 4) User program recieves the result and continues
+    - 3) Hardware selects entry from interrupt vector
+    - 4) Appropriate handler is invoked
+- Switching back
+    - From an interrupt, just reverse all steps because it is asynchronous
+    - From exception and system call, increment PC on return
+        - Synchronous, so you want to execute the next instruction, not the same one again
+        - handler changes PC at the base of the stack
+        - on system call, increment is done by the hardware
+- For effection protection, the hardware must support at least three features:
+    - 1) Privileged instructions
+        - prevents user processes from halting the machine
+        - mode bit
+    - 2) Timer interrupts
+        - prevents process from gaining control of the CPU and never releasing it
+        - hardware timer
+    - 3) Memory protection
+        - prevents unauthorized access of data
