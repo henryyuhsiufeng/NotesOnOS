@@ -182,3 +182,81 @@
     - Priority manipulation
     - Debugging support
     - Alarms and time
+
+## CPU Scheduling 2-3-20
+- The OS uses multiprogramming, or concurrency, to increase system utilization and throughput by overlapping I/O and CPU activities 
+- Long-Term Scheduling
+    - How does the OS determine the degree of multiprogramming the number of jobs residing at once in the primary memory?
+- Short-Term Scheduling
+    - How does the OS select a process from the ready queue to execute?
+#### Short-Term Scheduling
+- The scheduler schedules the next process on the CPU
+    - It is the mechanism
+    - It implements a policy
+- The scheduler (maybe) executes when" 
+    - A process switches from running to blocking
+    - A process is created or terminated
+    - An interrupt occurs
+        - I/O devie finished
+        - Periodic timer
+#### Scheduling Policies: Two Big Categories
+- Scheduling algorithms are divided into categories based on their use of the timer interrupt
+    - Non-preemptive
+        - An executing process is not ever pre-empted
+        - Scheduler runs when process blocks or terminates -- not on hardware interrupts
+    - Preemptive
+        - An executing process might be pre-empted from the CPU
+        - Scheduler runs on interrupts, mostly timer, but also system calls
+        - Most OSes today have this
+#### Evaluating Scheduling Policies
+- CPU Utilization: Percentage of time that the CPU is busy
+- Throughput: Number of processes completing in a unit of time
+- Turnaround Time: Length of time to run a process from initialization to termination, including all the waiting time
+- Response Time: Time between issuing a command and getting a result (User Interaction/Feedback)
+- Waiting Time: Total amount of time that a process is in the ready queue
+#### Scheduling Policies
+- Ideal CPU scheduler
+    - Maximizes CPU utilization and throughput
+    - Minimizes turnaround time, waiting time, and response time
+    - Requires knowledge of process behavior we typically don't have
+#### Scheduling Algorithms
+- One process per user
+- One thread per process
+    - More on this topic next time
+- Processes are independent (Don't worry about waiting for child processes)
+- First Come First Served (FCFS)
+    - Also known as First In First Out (FIFO)
+    - Scheduler executes jobs in arrival order
+    - Jobs run until they either complete or block on I/O
+    - In early FCFS schedulers, the job did not relingquish the CPU eve when it was doing I/O
+    - ADVANTAGE(S):
+        - Simple to implement
+        - Intuitively fair
+    - DISADVANTAGE(S):
+        - Not preemptive -> not suitable for interactive jobs
+        - Long-running process will delay all jobs behind it
+    
+- Round Robin 
+    - (Time Slice - quantum)
+    - Add a timer and use a pre-emptive policy
+    - Run each process for its time slice (Scheduling quantum)
+    - After each time slice, move the running process to the back of the queue
+    - Selecting a time slice: 
+        - Too large: waiting time suffers, degenerates to FCFS if processes are never preempted
+        - Too small: Throughput suffers because too much time is spent context switching
+        - Balance the two by selecting a time slice where context switching is roughly 1% if the time slice
+    - Most time sharing systems use some variation of this policy
+    - A typical time slice today is between 10-100 miliseconds, with a context siwtch time of 0.1 to 1 milisecond
+    - ADVANTAGE(S):
+        - Fair that every proess gets an equal share of the CPU.
+        - If we know the number of processes on the run queue, we can know the worst-case response time for a process
+    - DISADVANTAGE(S):
+        - Giving every process an equal share of the CPU is not always a good idea. (highly interactive processes will get scheduled no more frequently than CPU-bound processes)
+- Shortest Job First SJF
+    - Schedule the job that has the least amount of work (measured in CPU time) to do until its next I/O request or termination
+        - I/O bound jobs get priority over CPU bound jobs
+    - Works for preemptive and non-preemptive schedulers
+    - DISADVANTAGE(S):
+        - Requires Approximations
+        - Might never get to a large job (starvation)
+- *** Using the Past to Predict the Future ***
