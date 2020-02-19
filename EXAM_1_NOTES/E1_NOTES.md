@@ -260,3 +260,21 @@
         - Requires Approximations
         - Might never get to a large job (starvation)
 - *** Using the Past to Predict the Future ***
+    - If a process isI/O bound in the past, it is also likely to be I/O bound in the future
+    - To exploit this behabior, the scheduler can fabor jobs when they use very little CPU time, thus approximating SJF
+    - This policy is adaptive because it relies on past behavior and changes in behabior result in changes to scheduling decisions
+- Approximating SJF: Multilevel Feedback Queues
+    - Multiple queues with different priorities
+    - OS uses Round Robin scheduling at each priority level, running the jons in the highest priority queue first
+    - Once those finish, OS runs jobs out of the next highest priority queue
+        - Can lead to starbation if highest priority jobs run forever
+    - Round robin time slice increases exponentially at lower priorities
+
+    - Adjust priorities as follows
+        1. Job starts in the highest priority queue
+        2. If job's time slice expires, drop its priority one level, but no further tha the lowest level
+        3. If job's time slice does not expire, then increase its priority one level, up to the top priority level
+#### Improving Fairness
+- Since SJF is optimal, but unfair, any increase in fairness by giving long jobs a fraction of the CPU when shorter jobs are available will degrade average waiting time
+    - Give each queue a fraction of the CPU time
+    - Adjust the priority of jobs as they do not get serviced
