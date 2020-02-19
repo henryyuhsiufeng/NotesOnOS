@@ -60,7 +60,8 @@
 - How can the OS enforce restriced rights?
     - BAD WAY: OS interprets each instruction. TOO SLOW
     - GOOD WAY: Dual mode execution with restricted access in the user mode and unrestricted access in the kernel mode.
-- USER vs KERNEL MODE
+
+#### USER vs KERNEL MODE
     - User MAY NOT/Kernel CAN: 
         - address I/O directly
         - use instructions that manipulate OS memory
@@ -81,7 +82,7 @@
             - Privileged hw register points to exception stack
             - Why not use user-level stack: Reliability (even if user's stack points to invalid address, handlers continure to work), Security (kernel state should not be stored in user space)
             - One exception stack per processor/process/thread
-        - System calls: A request by a user-level process to call a function in the kernel is a sysem call (read(), write(), exit()). It is the interface between the application and the operating system. Parameters passed according to calling convention
+        - System calls: A request by a user-level process to call a function in the kernel is a system call (read(), write(), exit()). It is the interface between the application and the operating system. Parameters passed according to calling convention
             - 1) User process executes a trap instruction
             - 2) Hardware calls the OS at the system-call handler, a prespecified location
             - 3) OS then identifies the required service and parameters, executes the required service, sets a register to contain the result of call, executes an RTI instruction to return to the user program
@@ -94,7 +95,7 @@
         - Synchronous, so you want to execute the next instruction, not the same one again
         - handler changes PC at the base of the stack
         - on system call, increment is done by the hardware
-- For effection protection, the hardware must support at least three features:
+- For effective protection, the hardware must support at least three features:
     - 1) Privileged instructions
         - prevents user processes from halting the machine
         - mode bit
@@ -103,3 +104,6 @@
         - hardware timer
     - 3) Memory protection
         - prevents unauthorized access of data
+
+## Processes and Dual Mode Execution 1-29-20
+
