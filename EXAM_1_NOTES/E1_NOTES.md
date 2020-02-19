@@ -106,4 +106,79 @@
         - prevents unauthorized access of data
 
 ## Processes and Dual Mode Execution 1-29-20
-
+#### Process
+- A process is a program during execution
+- A process is the basic unit of executionin an OS
+- Different processes may run different instances of the same prgram
+- Requires:
+    - Memory to contian the program code and data
+    - A set of CPU registers to support execution
+#### Process State
+- Consists of at least:
+    - The contents of the address space, including:
+        - The code for running the program
+        - The static data for running the program
+        - An execution stack with the program's call chain
+        - The heap, where dynamic data is allocated
+    - Registers and their contents, including:
+        - The heap pointer
+        - The program counter indicating the next instruction
+        - The stack pointer 
+    - The set of OS resources in use
+    - Process identifier
+    - Process execution state
+#### Process Life Cycle
+- new, ready, blocked, running, terminated
+#### How does the OS track this data?
+- The OS uses a Process Control Block
+    - Dynamic kernel data structure kept in memory
+    - Represents the execution state and location of each process when it is not executing
+- The PCB contains: 
+    - Process identification number, program counter, stack pointer, contents of feneral purpose registers, memory management information, username of owner, list of open fiels
+- PCBs are initialized when a process is created and deleted when a process terminates
+- Only OS can access the PCB
+#### How to Create a Process
+- One process can create other processes (Parent, Child)
+- In some systems, the parent defines resources and privileges to its children
+- The parent can either wait for the child to complete or continue in parallel
+    - If single core, than parallel is not possible
+#### Fork()
+- Copies a process into an (identical) process
+    - copies variable values and program counter from parent to child
+    - Returns twice: once to the parent and once to the child
+    - Return value is different in the parent and child
+        - Parent: it is the child process id
+        - Child: it is 0
+    - Both processes begin execution from the same point
+    - Each process has its own memory and its own copy of each variable
+#### Exec()
+- Overlays a process with a new program
+    - PID does not change
+    - Arguments to new program may be specified
+    - Code, stack, and heap are overwritten
+- Child processes often call exec() to start a new and different program
+- If call is successful, it si the same process, but it is running a different program
+#### The wait() system call
+- Causes the parent process to wait for the child process to terminate
+    - Allows parent process to get return value from the child
+    - When a child calls exit(), the OS unblocks the parent and returns the value passed by exit() as a result of the wait call
+    - If there are no children alive, wait() returns immediately
+    - Also, if there are zombies waiting for thei parents, wait() returns one of the values immediately
+- The parent will block for the child to finish
+#### Zombie Process
+- Process has terminated
+- Parent process has not collected its status
+#### Terminating a process exit()
+- Takes the result of the process as an argument
+#### Terminating a process kill()
+- A parent can terminate a child using kill
+- Sends a signal to a specified process
+- There are handlers, but it one does not exist, the default action is taken
+#### Orphaned Processes
+- Parent terminates before the child
+- Child can orphan itself to keep running in the background
+#### Process Control
+- OS must include calls to enable special control of a process
+    - Priority manipulation
+    - Debugging support
+    - Alarms and time
