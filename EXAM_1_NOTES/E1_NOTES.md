@@ -19,10 +19,10 @@
         - Disadvantages:
             - No protection - can easily crash bash monitor
             - Computer is idle during I/O (Load program, output to tape, print results)
-    - 3) Overlap ofI/O and computation, interrupts
+    - 3)Overlap of I/O and computation, interrupts
         - Performance improves because I/O and processing happen concurrently
         - Concurrency? Concurrency is the execution of several instruction sequences at the same time. In an operating system, this happens when there are several process threads running in parallel. These threads may communicate with each other through either shared memory or message passing. Concurrency results in sharing of resources result in problems like:- deadlocks and resources starvation. Concurrency is the interleaving of processes in time to give the appearance of simultaneous execution.
-    - 4) Multiprogramming: several programs run at the same time sharing the machine
+    - 4)Multiprogramming: several programs run at the same time sharing the machine
         - OS manages interacitons between concurrent programs
         - Requires: memory protection and relocation
         - Keepin several jobsin memory and multiplex CPU between Jobs
