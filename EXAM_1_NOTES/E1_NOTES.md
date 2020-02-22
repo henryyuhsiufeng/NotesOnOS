@@ -79,13 +79,13 @@
 - What is happening when user mode to kernel mode?
     - 1) OS saves state of user program
     - 2) Hardware identifies why boundary is crossed (system call?, interrupt?, which exception)
-        - Saving the state of the interrupted process
+        - Saving the state of the interrupted process (interrupts)
             - Privileged hw register points to exception stack
             - Why not use user-level stack: Reliability (even if user's stack points to invalid address, handlers continure to work), Security (kernel state should not be stored in user space)
             - One exception stack per processor/process/thread
         - System calls: A request by a user-level process to call a function in the kernel is a system call (read(), write(), exit()). It is the interface between the application and the operating system. Parameters passed according to calling convention
             - 1) User process executes a trap instruction
-            - 2) Hardware calls the OS at the system-call handler, a prespecified location
+            - 2) Hardware calls the OS at the system-call handler, a prespecified location (interrupts, system calls, traps)
             - 3) OS then identifies the required service and parameters, executes the required service, sets a register to contain the result of call, executes an RTI instruction to return to the user program
             - 4) User program recieves the result and continues
     - 3) Hardware selects entry from interrupt vector
