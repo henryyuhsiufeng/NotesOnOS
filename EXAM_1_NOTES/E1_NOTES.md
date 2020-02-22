@@ -90,7 +90,9 @@
             - 4) User program recieves the result and continues
     - 3) Hardware selects entry from interrupt vector
     - 4) Appropriate handler is invoked
-- When a transition between user mode and kernel mode is required in an operating system, a context switch is not necessary
+- When a transition between user mode and kernel mode is required in an operating system, a context switch is not necessary.
+    - A Context switch IMPLIES a mode switch
+    - Whereas a mode switch DOES NOT imply a context switch
 - Context Switch: is the process of storing the state of a process or thread, so that it can be restored and resume execution at a later point. This allows mutliple processes to share a single CPU, and is essential feature of a multitasking OS.
 - Switching back
     - From an interrupt, just reverse all steps because it is asynchronous
