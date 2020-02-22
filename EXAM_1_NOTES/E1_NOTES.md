@@ -70,6 +70,7 @@
         - halt the machine
 - How to transition modes (entering the kernel)(3 Methods)?
     - Exceptions
+        - synchronous
     - Interrupts
         - Asynchronous (not related to instruction that just executed)
     - System calls/traps 
