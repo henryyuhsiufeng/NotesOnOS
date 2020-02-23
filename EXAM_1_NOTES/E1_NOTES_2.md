@@ -18,7 +18,68 @@
             - Each process may have multiple threads of control
                 - Must have one
                 - Virtualizes the processor = runs the program with access to the resources provided by the process
-            - A thread is an entity within a process that can be scheduled for execution. All threads of a process share its virtual address space and system resources. In addition, each thread maintains exception handlers, a scheduling priority, thread local storage, a unique thread identifier, and a set of structures the system will use to save the thread context until it is scheduled. The thread context included the thread's set of machine registers, the kerel stack, a thread environment vlock, and a user stack in the address space of the thread's process. Threads can also have their own security context (SYNCHRONIZATION), which can be used for impersonating clients. 
+            - A thread is an entity within a process that can be scheduled for execution. All threads of a process share its virtual address space and system resources. In addition, each thread maintains exception handlers, a scheduling priority, thread local storage, a unique thread identifier, and a set of structures the system will use to save the thread context until it is scheduled. The thread context included the thread's set of machine registers, the kerel stack, a thread environment vlock, and a user stack in the address space of the thread's process. Threads can also have their own security context (SYNCHRONIZATION), which can be used for 
+            impersonating clients. 
+            - Programmers create multi-threaded programs to:
+                - Better represent the structure of the tasks
+                - Improve performance
+                    - One thread can perform computation while another waits for I/O
+                    - Threads may be scheduled across different processors in a multi-processor architecture
+                - Web servers
+            - Threads are lightweight
+                - Creating a thread is cheaper than creating a process
+                - Communication between threads is easier than between processes
+                    - Processes must set up a shared resource or pass messages or signals
+                - Context switching between threads is cheaper because they share the same address space
+            - Threads just like processes go through a sequence of new, ready, running, blocking, and terminated states
+            - Threads and the address space
+                - Processes define an address space; threads share teh address space
+                    - All process data can be accessed by any thread
+                        - Particularly global data
+                        - Heap is also shared (What about pointers to heap? yes, because pointers can be stored in the thread's stack)
+                - Each thread has:
+                    - its own stack (stack pointers too)
+                        - But there is no protection... so any thread can modify another thread's stack
+                    - Exclusive use of the CPU registers while it is executing
+                        - When a thread is pre-empted, its register values are saved as part of its state
+                        - The new thread gets to use the registers! 
+            - Metadata structures
+                - Process Control Block contains process-specific information
+                    - Owner, PID, heap pointer, priority, active threadm and pointers to thread information
+                - Thread control Block contains thread specific information
+                    - Stack pointer, PC, thread state, register values, a pointer to PCB
     - User vs. kernel Threads
+        - User-level Threads
+            - A thread the OS does not know about
+            - OS only schedules the process not the threads within a process
+            - Programmer uses a thread library to manage threads (create, delete, synchronize, and schedule)
+                - User-level code can define scheduling policy
+                - Threads yield to other threads or voluntarily give up the processor
+            - Switching USER threads does not involve a context switch
+        - Kernel-Level Threads
+            - A kernel-level thread is a thread that the OS knows about
+                - Every process has at least one kernel-level thread
+            - Kernel manages and schedules threads (as well as processes)
+            - Switching between kernel-level threads of the same process requires a small context switch
+                - Values of registers, program counter, and stack counter must be switched
+                - Memory management nformation remains since threads share an address space
+            - Also known as kernel threads 
+            - THE POWER of kernel level threads
+                - I/O: the OS can choose another thread in the smae process when a thread does I/O
+                    - Non blocking calls are good in theroy, but difficult to program in practice
+                - Kernel level threads can exploit parallelism
+                    - Different processors of a symmetric multiprocessor
+                    - Different cores on a multicore CPU
+                - Used by systems: Linux, Solaris, Windows
+        - Kernel-level Threads: Context switches between threads of the same process
+            - Similar to proceses: 
+                - Thread is running
+                - Threads blocks, is interrupted, or voluntarily yields
+                - Mode switch to kernel mode
+                - OS code saves thread state to TCB
+                - OS code chooses new thread to run
+                - OS code loads its state from TCB
+                - Mode switch to user mode
+                - Thread is running
     - Creating, dispatching
-    - Independent vs. Cooperating
+    - Independent vs.Cooperating
