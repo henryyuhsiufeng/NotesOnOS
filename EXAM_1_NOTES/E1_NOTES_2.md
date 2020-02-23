@@ -1,0 +1,24 @@
+## Threads and Too much M I L K ! 2-5-20
+- Threads
+    - Differences from processes
+        - Processes
+            - A process is the abstraction used by the OS to manage resources and provide protection
+            - A process defines an address space
+                - Identifies all addresses that may be touched by the program
+            - A process has a single thread of control that executes instructions sequentially
+            - What if we decouple the thread of control information from the process??? 
+                - Error: Thread will lose its access to code to run, environment variables, etc
+            - Thread of instruction refers to just code and the way it flows around the functions, procedures, loops, and conditionals. Thread of controll refers to execution by kernel thread withits own program counter/stack. One thread of instruction can have many threads of control executing its code. 
+            - Each process provides the resources needed to execute a program. A process has a virtual address space, executable code, open handles to system objects, a securit context, a unique process identifier, environment variables, a priority class, minimum and maximum working set sizes, and at least one thread of execution. Each process is started with a single threadm often called the primary thread, but can create additional threads from any of its threads. 
+        - Threads 
+            - Represents an abstract entity that executes a sequence of instructions
+                - Short for thread of control
+                - Deefines a single sequential execution stream within a process
+            - Threads share their address space
+            - Each process may have multiple threads of control
+                - Must have one
+                - Virtualizes the processor = runs the program with access to the resources provided by the process
+            - A thread is an entity within a process that can be scheduled for execution. All threads of a process share its virtual address space and system resources. In addition, each thread maintains exception handlers, a scheduling priority, thread local storage, a unique thread identifier, and a set of structures the system will use to save the thread context until it is scheduled. The thread context included the thread's set of machine registers, the kerel stack, a thread environment vlock, and a user stack in the address space of the thread's process. Threads can also have their own security context (SYNCHRONIZATION), which can be used for impersonating clients. 
+    - User vs. kernel
+    - Creating, dispatching
+    - Independent vs. Cooperating
