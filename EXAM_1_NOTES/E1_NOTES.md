@@ -139,7 +139,7 @@
     - Dynamic kernel data structure kept in memory
     - Represents the execution state and location of each process when it is not executing
 - The PCB contains: 
-    - Process identification number, program counter, stack pointer, contents of feneral purpose registers, memory management information, username of owner, list of open fiels
+    - Process identification number, program counter, stack pointer, contents of several purpose registers, memory management information, username of owner, list of open fiels
 - PCBs are initialized when a process is created and deleted when a process terminates
 - Only OS can access the PCB
 #### How to Create a Process
