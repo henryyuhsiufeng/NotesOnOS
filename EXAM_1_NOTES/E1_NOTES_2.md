@@ -83,3 +83,12 @@
                 - Thread is running
     - Creating, dispatching
     - Independent vs.Cooperating
+        - Independent threads have no shared state with other threads
+            - Simple to implement
+            - Deterministic
+            - Reproducible
+            - Scheduling order doesn't matter
+        - Cooperating threads share state
+            - Non deterministic 
+            - Non reproducible
+            - Give us concurrency!
