@@ -94,6 +94,12 @@
     - A Context switch IMPLIES a mode switch
     - Whereas a mode switch DOES NOT imply a context switch
 - Context Switch: is the process of switching processes
+- When can context switching occur??? 
+    - The process exits
+    - The process uses up its time slice
+    - The process requires another resouce that is not currently available or needs to wait for I/O cto complete
+    - A resource has become available for a sleeping process. If there is a higher priority process ready to run, the kernel will run this instead
+    - The process relinquishes the CPU using a semaphore or similar system call
 - Switching back
     - From an interrupt, just reverse all steps because it is asynchronous
     - From exception and system call, increment PC on return
