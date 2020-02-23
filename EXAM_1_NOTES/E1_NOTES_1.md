@@ -4,8 +4,10 @@
     - Referees: 
         - Manage shared resources
         - Provide protection and communication for process
+        - Dual Mode
     - Illutionists:
         - Provide the illusion of infinite resources
+        - CPU Scheduling
     - Glue: 
         - Provide standard services which the hardware implements
 
