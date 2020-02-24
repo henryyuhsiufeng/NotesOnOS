@@ -82,6 +82,11 @@
                 - Mode switch to user mode
                 - Thread is running
     - Creating, dispatching
+    - One Abstraction, Many Flavors
+        - Single-threaded processes
+        - Multi-threaded processes with user-level threads
+        - Multi-threaded proceses with kernel-level threads
+        - In-kernel threads
     - Independent vs.Cooperating
         - Independent threads have no shared state with other threads
             - Simple to implement
