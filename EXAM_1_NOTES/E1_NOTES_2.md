@@ -97,3 +97,37 @@
             - Non deterministic 
             - Non reproducible
             - Give us concurrency!
+    - Race COnditions
+        - What guarantees do we have about how our people/threads will scheduled? There is no way
+        - A race condition occurs when two or more threads can access shared data and they try to change it at the same time. Because the thread scheduling algorithm can swap between threads at any time, you don't know the order in which the threads will attempt to access the shared data. Therefore, the result of the change in data is dependent on the thread scheduling algorithm, i.e. both threads are "racing" to access/change the data.
+## Locks and Semaphores Feb 10, 2020
+- More about Race Conditions
+- Eliminating race conditions! Or Forcing threads to behave properly
+- Synchronization Terminology
+    - Atomic Operations
+    - Mutual exclusion, critical sections (Safety, Liveness, Bounded Waiting)
+    - Synchronization Primitives
+        - Locks
+        - Semaphores
+- Critical Sections and Correctness
+    - Four properties are required for correctness
+        - 1. Safety: only one thread in the critical section
+        - 2. Liveness: if no threads are executing a critical section, and a thread wishes to enter a critical section, that thread must be guaranteed to eventually enter the critical section
+        - 3. Bounded Waiting: if a thread wishes to enter a critical section, then there exists a bound on the number of other threads that may enter the critical section before that thread does
+        - 4. Failure Atomicity: it's okay for a thread to die in the critical section
+- Mutual Exclusion
+    - Exactly one thread (or process) is doing a particular activity at a time. Usually related to critical sections
+    - Some computer resources cannot be accessed by multiple threads at a time
+    - For shared memory architectures, data structures are often mutuall exclusive
+        - Two threads adding to a linked list can corrupt the list
+- When to use Mutual Exclusion/Critical Sections?
+    - Anytime you access shared data
+        - If a thread checks a value 
+        - If a thread updates a piece of shared data
+- Terminology 
+    - Mutual Exclusion: Exactly one thread (or process) is doing a particular activity at a time. Usually related to critical sections
+    - Critical Section: A piece of code that only one thread can execute at a time
+    - Atomic Operation: An operation that is uninterruptible
+    - Synchronization: Using atomic operations to ensure cooperation between threads
+- Atomic Operations
+    - Operations that are uninterruptible --- run to completion or not at all
