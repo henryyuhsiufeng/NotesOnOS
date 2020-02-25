@@ -88,3 +88,6 @@
 - Name the benefits of Fine grain locking and conservative 2-phase locking
     - Fine grain more concurrency better perfomance. 
     - conservative 2-phase locking helps prevent deadlock because prevents hold and wait and provides serialibility
+
+- Q/A
+    - 
