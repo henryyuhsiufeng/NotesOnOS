@@ -83,3 +83,8 @@
     - synchronize with locks and condition variables
 
 - name the difference between mesa/hansem and hoare semantics
+
+- advanced synchronization
+- Name the benefits of Fine grain locking and conservative 2-phase locking
+    - Fine grain more concurrency better perfomance. 
+    - conservative 2-phase locking helps prevent deadlock because prevents hold and wait and provides serialibility
