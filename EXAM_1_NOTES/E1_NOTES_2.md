@@ -1,5 +1,8 @@
 ## Threads and Too much M I L K ! 2-5-20
 - Threads
+
+    - Share and communicate through glbal and static data, share the heap, each has its own stack and full use of the registers
+    - Nire threads can be creates using either system calls (kernel threads) or libraries (user threads)
     - Differences from processes
         - Processes
             - A process is the abstraction used by the OS to manage resources and provide protection
@@ -45,7 +48,7 @@
                         - The new thread gets to use the registers! 
             - Metadata structures
                 - Process Control Block contains process-specific information
-                    - Owner, PID, heap pointer, priority, active threadm and pointers to thread information
+                    - Owner, PID, heap pointer, priority, active thread and pointers to thread information
                 - Thread control Block contains thread specific information
                     - Stack pointer, PC, thread state, register values, a pointer to PCB
     - User vs. kernel Threads
@@ -101,6 +104,7 @@
         - What guarantees do we have about how our people/threads will scheduled? There is no way
         - A race condition occurs when two or more threads can access shared data and they try to change it at the same time. Because the thread scheduling algorithm can swap between threads at any time, you don't know the order in which the threads will attempt to access the shared data. Therefore, the result of the change in data is dependent on the thread scheduling algorithm, i.e. both threads are "racing" to access/change the data.
 ## Locks and Semaphores Feb 10, 2020
+- Critical sections: parts of the program where the shared resource is accessed need to be protected in ways that avoid the concurrent access.
 - More about Race Conditions
 - Eliminating race conditions! Or Forcing threads to behave properly
 - Synchronization Terminology
@@ -131,3 +135,51 @@
     - Synchronization: Using atomic operations to ensure cooperation between threads
 - Atomic Operations
     - Operations that are uninterruptible --- run to completion or not at all
+
+- 6 commandments
+    - Thou shalt always do things the same way
+    - Thou shalt always synchronize with locks and condition variables
+    - Thou shalt always acquire the lock at the beginning of a function and release it at the
+    end
+    - Thou shalt always hold lock when operating on a condition variable
+    - Thou shalt always wait in a while loop
+    - (Almost) Never sleep()
+
+## Locks
+- Locks, Generally allows one thread to prevent another thread from doing something
+    - Lock before entering a critical section or before accessing shared data
+    - Unlock when leaving a critical section or when access to shared data is complete
+    - Wait if locked
+- Locks, more formally provide mutual exclusion to shared data with two atomic routines:
+        - Lock::acquire -> wait until lock is free, then grab it
+        - Lock::release - unlock and wak up any thread waiting in acquire
+    - Locks have two states: Busy and Free
+        - Lock is initially free
+    - Rules for using a lock:
+        - Acquire the lock before accessing shared data
+        - Release the lock after finishing with shared data
+- Key observation 
+    - Why do we need mutual exclusion?
+        - scheduler (prevent context switching at bad times)
+    - On a uniprocessor, an operation is atomic if no context switch can occur in the middle fo the operation
+        - Mutual exclusion by preventing the context switch
+    - Context switches occur because of:
+        - Internal events: systems calls and exceptions
+        - External events: interrupts
+- Disabling interrupts
+    - Tells the hardware to delay handling any external events until after the thread is finished modifying the critical section
+    - In some implementations, done by setting and unseting the interrupt status bit
+    - Why do we have interrupts
+- Atomic Read-Modify-Write Instructions
+    - Atomic read-modify-write instructions atomically read a value from memory into a register and write a new value
+        - Read a memory location into a register AND
+        - Write a new value to location
+        - Test&set
+- Locks provide mutual exclusion
+    - Protext critical sections
+    - Implementing them may require a critical section
+    - But we need more
+        - What if we need to wait for another thread to take action?
+        - What if there is more than one resource available?
+
+## Semaphores
