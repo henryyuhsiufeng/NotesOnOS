@@ -183,3 +183,38 @@
         - What if there is more than one resource available?
 
 ## Semaphores
+- Semaphores offer elegant solutions to synchronization
+    - Mutual exclusion and more general synchronization
+- Semaphores are basically generalized locks
+    - Support two atomic operations up & down
+    - Has a value, bit the value has more options than busy/free
+    - Supports a queue of threads that are waiting to access a resource
+- Two Types of semaphores
+    - Binary: 
+        - Same as a lock
+        - Guarantees mutually exclusive access to a resource
+        - Has two values: 0 or 1
+        - Initial value is always free (1)
+    - Counted Semaphore
+        - Represents a resource with many units available 
+        - Initial count is typically the number of resources
+            - Always a non-negative integer
+        - Allows a thread to continue as long as more instances are available
+        - Used for more general synchronization
+- When to use semaphores
+    - Mutual Exclusion
+        - Use to protect the critical section 
+    - Control access to a pool of resouces -> counted semaphore
+    - General Synchronization
+        - Use to enforce general scheduling constraints where the threads must wait for some circumstance
+        - Value is typically 0 start
+        - Down() and up() are called different threads from different parts of the code base
+
+- Locks define critical sections
+    - Lock implementation generally requires hardware support
+    - Locks can busy-wait, and busy-waiting cheaply is important
+- Semaphores are basically generalized locks
+    - Used for mutual exclusion and more general synchronization
+    - Each sempahore supports a queue of processes that are waiting to access a critical section
+    - No busy waiting! Threads sleep inside down() until they have the resource 
+    
