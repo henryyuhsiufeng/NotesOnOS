@@ -9,7 +9,7 @@
         - Provide the illusion of infinite resources
         - CPU Scheduling
     - Glue: 
-        - Provide standard services which the hardware implements
+        - Provide standard services which the hardware implements, which makes life easier for the user and the application programmer
 
 #### History of Operating Systems and Dual Mode Execution
 - Phase 1 (Expensive Hardware, Cheap Humans): 
@@ -120,6 +120,10 @@
 
 ## Processes and Dual Mode Execution 1-29-20
 #### Process
+- Three abstractions: Protection and basic unit of execution
+    - Protection: processes define the address space
+    - Basic unit of execution: helps CPU scheduler provide illusion of resources through fairness
+    - Running application: provides unified view to user
 - A process is a program during execution
 - A process is the basic unit of executionin an OS
 - Different processes may run different instances of the same prgram
