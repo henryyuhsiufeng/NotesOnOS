@@ -218,14 +218,6 @@
     - Each sempahore supports a queue of processes that are waiting to access a critical section
     - No busy waiting! Threads sleep inside down() until they have the resource 
 
-## Monitors
-- Encapsulate shared data
-    - Collect related shared data into an object/module
-- Allow operations on the shared data
-- Provide mutual exclusion
-- Allow threads to synchronize in the critical section
-- Use over locks when there is more threads to take action and when there is more than one resource available
-
 - When to use semaphores
     - Mutual exclusion
     - control access to a pool of resources (more than one resource)
@@ -240,7 +232,7 @@
     - starvation can occur without deadlck
     - Deadlock does imply starvation
     - CONDITIONS
-        - Mutual exclusion: at least one  thread must hold a resource in non-sharable mode
+        - Mutual exclusion: at least one thread must hold a resource in non-sharable mode
             - Make resources sharable
         - Hold and wait: At least one thread holds a resources and is waiting for other 
         resources to become available. A different thread holds the resource. 
@@ -249,3 +241,83 @@
             - If a thread requests a resource that cannot be immediately allocated to it, then the OS preempts all the resources the thread is currently holding. Only when all the resources are available will the OS restart the thread
         - circular wait: A set of waiting threads where t is waiting on t and t is waiting on t. 
             - impose an ordering on the locks and request them in order
+                - Complications:
+                    - Maintaining global order is difficult in a large project
+                    - Global order can force a client to grab a lock earlier than it would like, tying up the lock for longer than necessary
+
+## Monitors
+- Encapsulate shared data
+    - Collect related shared data into an object/module
+    - all data is private
+- Allow operations on the shared data
+- Provide mutual exclusion
+- Allow threads to synchronize in the critical section
+
+- A monitor defines a lock and zero or more condition variables for managing concurrent access to shared data.
+    - Uses the lock to ensure that only a single thread is active in the monitor at any point
+    - the lock also provides mutual exclusion for shared data
+    - Condition variables enable threads to block waiting for an event inside of critical sections
+        - Release the lock at the same time the thread is put to sleep
+
+- Condition variables 
+    - Enable threads to wait efficiently for changes to shared state protected by a lock
+    - Each one is a queue of waiting threads
+    - Enable the thread to block inside a critical section by atomically releasing the Lock at the same time the thread is blocked
+    - Rule: A thread must hold the lock when doing condition variable operations
+
+- Mesa/Hansen Style
+    - The thread that signals keeps the lock
+    - The waiting thread waits for the lock
+        - Signal is only a hint that the condition mau be true: shared state may have changed!
+        - Adding signals affects performance, but never safety
+    - Implemented in Java and most real operating systems
+
+- Signal vs Broadcast
+    - It is always safe to use broadcast() instead of signal()
+        - only performacne is affected
+    - Signal is preferable when
+        - at most one waiting thread can make progress
+        - any thread waiting on the condition variable can make progress
+    - broadcast is preferable when
+        - multiple waiiting threads may be able to make progress
+        - the same condition variable is used for multiple predicates
+    
+## Advanced Synchronization and Synchronization Recap
+- One Big Lock
+    - Advantage: Simple
+        -  Relatively easy to get correct
+        - This is a big advantage
+    - Disadvantage: Performance
+        - Eliminates advantages due to multi-threading for that part of your code
+        - Eliminates advantages due to multicore in that part of your code
+
+- Fine grained locking
+    - Better for performance
+        - This will matter more in the kernel than in an application
+    - Complex
+        - May need to acquire multiple locks to accomplish a task
+        - Incorrect code becomes more likely -> deadlock
+
+- Conservative Two-phase locking
+    - A thread must:
+        - acquire all lockts it will need
+            - If all locks cannot be acquired, release any already acquired and begin again
+    - Thus B cannot see any of A's changes until A commits and releases he lock
+    - provides serailizability
+    - Prevents deadlock
+- Transactions
+    - Transactions group actions together so that they are
+        - Atomic: they all happen or they all don't
+        - Serializable: transactions appear to happen one after the other
+        - Durable: once it happens, it sticks
+    - Critical sections give us atomicity and serializability, but not durability!!!!!
+
+- Achieving Durability, In Reality
+    - Reversing changes on disk is hard
+    - Keep write ahead log on disk of all changes in teh transaction
+    - Once all changes are written to the log, the transaction is committed
+        - Which means the word "Commit" is written at the end
+        - If a crash happens before the commit, then the log can just be ignored
+    - Write-behind changes to the disk
+        - As in, later on a thread will actaully put those changes in their proper spot in the filesystem
+        - If a crash occurs during 

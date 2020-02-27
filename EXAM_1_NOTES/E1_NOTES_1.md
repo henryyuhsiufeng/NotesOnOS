@@ -284,7 +284,7 @@
     - Multiple queues with different priorities
     - OS uses Round Robin scheduling at each priority level, running the jons in the highest priority queue first
     - Once those finish, OS runs jobs out of the next highest priority queue
-        - Can lead to starbation if highest priority jobs run forever
+        - Can lead to starvation if highest priority jobs run forever
     - Round robin time slice increases exponentially at lower priorities
 
     - Adjust priorities as follows
