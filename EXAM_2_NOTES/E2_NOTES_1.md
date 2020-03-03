@@ -92,7 +92,10 @@
         - Allocation requires a search for a suitable position
         - De-allocation requires a check to see if the freed partition could be merged with any adjacent free partitions
         - Pros:
+            - Simple
+            - Tends to produce larger free blocks toward the end of the address space
         - Cons:
+            - Fragmentation
 - Best Fit
     - Goal: 
         - To avoid fragmenting big free blocks
@@ -101,8 +104,14 @@
         - Free block list sorted by size
         - Allocation requires a search for a suitable position
         - De-allocation requires a check to see if the freed partition could be merged with any adjacent free partitions
-        - Pros:
+        - Pros: 
+            - Works well when most allocations are of small size
+            - Relatively simple
         - Cons:
+            - External fragmentation
+            - Slow allocation
+            - slow deallocation
+            - Tends to produce many useless tiny fragments
 - Worst Fit:
     - Goal:
         - To avoid having too many tiny fragments
@@ -111,6 +120,9 @@
         - Allocation is fast (get the largest)
         - De-allocation requires a check to see if the freed partition could be merged with any adjacent free partitions (Similar to best-fit)
         - Pros:
+            - Works best if allocations are of medium sizes
         - Cons:
+            - External fragmentation
+            - Tends to break large free blocks such that large partitions cannot be allocated
 
 
