@@ -16,6 +16,8 @@
     - Undergoes translation by the MMU -> the output of this process is the appropriate physical address or the location of code/data in RAM (or error such as seg fault)
     - Where is this stores???
         - Virtual memory is not stored in secondary storage (RAM)
+    - So is memory managed at the user level with kernel level making checks to ensure safety?
+        - 
 - Segment: A chunk of physical memory assigned to a process
     - Part of physical address assigned to the virtual address space
 
@@ -30,4 +32,85 @@
     - Compiler can generate physical addresses
     - Maximum address = Memory Size - OS Size
     - OS is protected from processes by checking
+
+#### Multiple Programs Share Memory: Requirements
+- Transparency:
+    - We want multiple processes to coexist in memory
+    - No process should be aware that memory is shared
+    - Processes should not care what physical portion of memory they get
+- Safety:
+    - Processes must not be able to corrupt each other
+    - Processes must not be able to corrupt the OS
+    - In user level - can't access other memory to other processes
+- Efficiency:
+    - Performance of the CPU and memory should not be degraded badly due to sharing
+
+#### Relocation
+- Put the OS in the highest memory
+- Assume at compile/link time that the process starts at 0 with a Maximum address = Memory Size - OS Size
+- When the OS loads the process, it allocates a contigsuous segment of memory in which the process fits. If it does not fit, the OS waits for a process to terminate
+- The first (smallest) physical address of the process is the base address and the largest physical address the process can access is the limit address
+- The base address is also known as the relocation address (OFFSET)
+
+#### Relocation: Two Types
+- Static (prior to runtime) & Dynamic (after runtime)
+- Static
+    - Loader adjusts the addresses in a process to relfect its location in memory
+    - Once process is assigned a place in memory and starts executing, OS cannot move it
+    - Address transformation being done before execution of a program begins
+- Dynamic (in parallel):
+    - Hardware adds relocation register (base) to virtual address to get physical address
+    - Hardware compares address with limit register
+        - Address must be less than limit
+        - if test fails, the processor raises an exception
+- How do we know how much memory a process will take up
+    - User states memory usage (old)
+    - Allocated same amount of memory to stack and heap
+    - Address transformations being done during executing of a program
+    - Includes address translation
+    - dynamic relocation checks address against limit and adds base in parallel
+
+#### Memory Management
+- As processes enter the system, gorw, and terminate, the OS must rack which memory is available (the holes) and which is utilized
+- Given a memory request from a starting process, the OS must decide what space to use for the process
+- Memory Allocation Policies: EVALUATION
+    - Goal: Minimize wasted space
+    - Two types of wasted space:
+        - External Fragmentation:
+            - Unused memory between units of allocation
+            - EX: two fixed tables for two but a party of four
+            - It occurs when variable size memory space are allocated to the processes dynamically
+            - When the process is removed from the memory, it creates free space in the memory causing external fragmentation
+        - Internal Fragmentation:
+            - Unused memory within a unit of allocation
+            - EX: A party of three at a table for four
+-  First Fit
+    - Goal: 
+        - Simplicity of Implementation
+    - Requirements
+        - Free block list sorted by address
+        - Allocation requires a search for a suitable position
+        - De-allocation requires a check to see if the freed partition could be merged with any adjacent free partitions
+        - Pros:
+        - Cons:
+- Best Fit
+    - Goal: 
+        - To avoid fragmenting big free blocks
+        - To minimize the size of resulting external fragments
+    - Requirments:
+        - Free block list sorted by size
+        - Allocation requires a search for a suitable position
+        - De-allocation requires a check to see if the freed partition could be merged with any adjacent free partitions
+        - Pros:
+        - Cons:
+- Worst Fit:
+    - Goal:
+        - To avoid having too many tiny fragments
+    - Requirements:
+        - Free block list sorted by size
+        - Allocation is fast (get the largest)
+        - De-allocation requires a check to see if the freed partition could be merged with any adjacent free partitions (Similar to best-fit)
+        - Pros:
+        - Cons:
+
 
